@@ -44,8 +44,7 @@ class ExampleGenericPlugin extends GenericPlugin {
 		$templateManager =& $args[0];
 
 		// Add some additional content to the headers as a demo.
-		$additionalHeadData = $templateManager->get_template_vars('additionalHeadData');
-		$templateManager->assign('additionalHeadData', $additionalHeadData."\n<!-- The example generic plugin is inserting additional header information here. -->");
+		$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
 
 		// Permit additional plugins to use this hook; returning true
 		// here would interrupt processing of this hook instead.
