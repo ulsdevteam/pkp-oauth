@@ -28,8 +28,8 @@ class OauthPlugin extends GenericPlugin {
 			if ($this->getEnabled()) {
 				// Register template callback
 				HookRegistry::register('TemplateManager::display',array($this, 'templateCallback'));
-                                // Register load callback
-                                HookRegistry::register('LoadHandler', array($this, 'loadCallback'));
+				// Register load callback
+				HookRegistry::register('LoadHandler', array($this, 'loadCallback'));
 			}
 			return true;
 		}
@@ -57,7 +57,7 @@ class OauthPlugin extends GenericPlugin {
 		return false;
 	}
 
-        /**
+	/**
 	 * Hook callback function for TemplateManager::display
 	 * @param $hookName string
 	 * @param $args array
@@ -66,16 +66,16 @@ class OauthPlugin extends GenericPlugin {
 	function templateCallback($hookName, $args) {
 		// Get the template manager from the hook parameters.
 		$templateManager =& $args[0];
-                $template =& $args[1];
-                
+		$template =& $args[1];
+				
 		if ($this->getEnabled()) {
-                    switch ($template) {
-                        case 'frontend/pages/userRegister.tpl':
-                        case 'frontend/pages/userLogin.tpl':
-                            	$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
-                            break;
-                    }
-                    return true;
+			switch ($template) {
+				case 'frontend/pages/userRegister.tpl':
+				case 'frontend/pages/userLogin.tpl':
+					$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
+					break;
+			}
+			return true;
 		}
 
 		// Permit additional plugins to use this hook; returning true
