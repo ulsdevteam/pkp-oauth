@@ -11,7 +11,7 @@
  * @class OauthPlugin
  * @ingroup plugins_generic_oauth
  *
- * @brief This example plugin demonstrates basic plugin structures in PKP applications.
+ * @brief This plugin adds the ability to link local user accounts to OAuth sources.
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
@@ -69,12 +69,12 @@ class OauthPlugin extends GenericPlugin {
 		$template =& $args[1];
 				
 		if ($this->getEnabled()) {
+			$request =& PKPApplication::getRequest();
 			switch ($template) {
 				case 'frontend/pages/userRegister.tpl':
 				case 'frontend/pages/userLogin.tpl':
-					$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
-					break;
-			}
+					$templateManager->register_outputfilter(array($this, 'javascriptFilter'));
+					break;			}
 		}
 
 		// Permit additional plugins to use this hook; returning true
@@ -82,6 +82,34 @@ class OauthPlugin extends GenericPlugin {
 		return false;
 	}
 
+	/**
+	 * Output filter adds javascript to display the OAuth options.
+	 * @param $output string
+	 * @param $templateMgr TemplateManager
+	 * @return $string
+	 */
+	function javascriptFilter($output, &$templateMgr) {
+		$matches = NULL;
+		if (preg_match('/<\/head>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
+			$offset = $matches[0][1];
+
+			$newOutput = substr($output, 0, $offset);
+			$newOutput .= $templateMgr->fetch($this->getTemplatePath() . 'oauthJsLoader.tpl');
+			$newOutput .= substr($output, $offset);
+			$output = $newOutput;
+			$templateMgr->unregister_outputfilter('javascriptFilter');
+		}
+		return $output;
+	}
+
+	/**
+	 * Override the builtin to get the correct template path.
+	 * @return string
+	 */
+	function getTemplatePath() {
+		return parent::getTemplatePath() . 'templates/';
+	}
+	
 	/**
 	 * Get the display name of this plugin
 	 * @return string
