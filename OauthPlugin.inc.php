@@ -75,7 +75,6 @@ class OauthPlugin extends GenericPlugin {
 					$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
 					break;
 			}
-			return true;
 		}
 
 		// Permit additional plugins to use this hook; returning true

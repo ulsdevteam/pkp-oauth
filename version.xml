@@ -12,10 +12,11 @@
   * Plugin version information.
   -->
 <version>
-	<application>oauthPlugin</application>
+	<application>oauth</application>
 	<type>plugins.generic</type>
 	<release>1.0.0.0</release>
 	<date>2014-07-09</date>
 	<lazy-load>1</lazy-load>
 	<class>OauthPlugin</class>
+        <sitewide>1</sitewide>
 </version>
