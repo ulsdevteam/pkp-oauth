@@ -26,8 +26,10 @@ class OauthPlugin extends GenericPlugin {
 	function register($category, $path) {
 		if (parent::register($category, $path)) {
 			if ($this->getEnabled()) {
-				// You could register for hooks here if needed
-				HookRegistry::register('TemplateManager::display',array($this, 'callback'));
+				// Register template callback
+				HookRegistry::register('TemplateManager::display',array($this, 'templateCallback'));
+                                // Register load callback
+                                HookRegistry::register('LoadHandler', array($this, 'loadCallback'));
 			}
 			return true;
 		}
@@ -35,19 +37,45 @@ class OauthPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * Hook callback function for TemplateManager::display
+	 * Hook callback function for LoadHander
 	 * @param $hookName string
 	 * @param $args array
 	 * @return boolean
 	 */
-	function callback($hookName, $args) {
+	function loadCallback($hookName, $args) {
 		// Get the template manager from the hook parameters.
-		$templateManager =& $args[0];
+		$page =& $args[0];
 
 		if ($this->getEnabled() && $page == 'oauth') {
 			$this->import('pages/OauthHander');
 			define('HANDLER_CLASS', 'OauthHander');
 			return true;
+		}
+
+		// Permit additional plugins to use this hook; returning true
+		// here would interrupt processing of this hook instead.
+		return false;
+	}
+
+        /**
+	 * Hook callback function for TemplateManager::display
+	 * @param $hookName string
+	 * @param $args array
+	 * @return boolean
+	 */
+	function templateCallback($hookName, $args) {
+		// Get the template manager from the hook parameters.
+		$templateManager =& $args[0];
+                $template =& $args[1];
+                
+		if ($this->getEnabled()) {
+                    switch ($template) {
+                        case 'frontend/pages/userRegister.tpl':
+                        case 'frontend/pages/userLogin.tpl':
+                            	$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
+                            break;
+                    }
+                    return true;
 		}
 
 		// Permit additional plugins to use this hook; returning true
