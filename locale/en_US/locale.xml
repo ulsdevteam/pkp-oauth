@@ -2,8 +2,9 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-  * plugins/generic/exampleGenericPlugin/locale/en_US/locale.xml
+  * plugins/generic/oauth/locale/en_US/locale.xml
   *
+  * Copyright (c) 2015-2016 University of Pittsburgh
   * Copyright (c) 2014 Simon Fraser University Library
   * Copyright (c) 2014 John Willinsky
   * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
@@ -12,7 +13,7 @@
   -->
 
 <locale name="en_US" full_name="U.S. English">
-	<message key="plugins.generic.exampleGenericPlugin.name">Example generic plugin</message>
-	<message key="plugins.generic.exampleGenericPlugin.description">This is a sample plugin that belongs in the Generic plugin category.</message>
-	<message key="plugins.generic.exampleGenericPlugin.exampleVerb">Example Verb</message>
+	<message key="plugins.generic.oauth.name">OAuth plugin</message>
+	<message key="plugins.generic.oauth.description">Allow for OAuth authentication.</message>
+	<message key="plugins.generic.oauth.exampleVerb">Example Verb</message>
 </locale>

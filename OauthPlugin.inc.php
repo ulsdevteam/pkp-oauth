@@ -1,21 +1,22 @@
 <?php
 
 /**
- * @file plugins/generic/exampleGenericPlugin/ExampleGenericPlugin.inc.php
+ * @file plugins/generic/oauth/OauthPlugin.inc.php
  *
+ * Copyright (c) 2015-2016 University of Pittsburgh
  * Copyright (c) 2014 Simon Fraser University Library
  * Copyright (c) 2014 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class ExampleGenericPlugin
- * @ingroup plugins_generic_exampleGenericPlugin
+ * @class OauthPlugin
+ * @ingroup plugins_generic_oauth
  *
  * @brief This example plugin demonstrates basic plugin structures in PKP applications.
  */
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
-class ExampleGenericPlugin extends GenericPlugin {
+class OauthPlugin extends GenericPlugin {
 	/**
 	 * Register the plugin, if enabled
 	 * @param $category string
@@ -43,8 +44,11 @@ class ExampleGenericPlugin extends GenericPlugin {
 		// Get the template manager from the hook parameters.
 		$templateManager =& $args[0];
 
-		// Add some additional content to the headers as a demo.
-		$templateManager->addHeader('exampleHeader', "<!-- The example generic plugin is inserting additional header information here. -->");
+		if ($this->getEnabled() && $page == 'oauth') {
+			$this->import('pages/OauthHander');
+			define('HANDLER_CLASS', 'OauthHander');
+			return true;
+		}
 
 		// Permit additional plugins to use this hook; returning true
 		// here would interrupt processing of this hook instead.
@@ -56,7 +60,7 @@ class ExampleGenericPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getDisplayName() {
-		return __('plugins.generic.exampleGenericPlugin.name');
+		return __('plugins.generic.oauth.name');
 	}
 
 	/**
@@ -64,7 +68,7 @@ class ExampleGenericPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getDescription() {
-		return __('plugins.generic.exampleGenericPlugin.description');
+		return __('plugins.generic.oauth.description');
 	}
 
 	/**
@@ -75,7 +79,7 @@ class ExampleGenericPlugin extends GenericPlugin {
 		return array_merge(
 			parent::getManagementVerbs(),
 			$this->getEnabled()?array(
-				array('exampleVerb', __('plugins.generic.exampleGenericPlugin.exampleVerb'))
+				array('exampleVerb', __('plugins.generic.oauth.exampleVerb'))
 			):array()
 		);
 	}
