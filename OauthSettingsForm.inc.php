@@ -59,7 +59,7 @@ class OauthSettingsForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
-		$this->readUserVars(array('oauthAppName','oauthAPIPath','oauthClientId','oauthClientSecret','oauthUniqueId'));
+		$this->readUserVars(array('oauthAppName','oauthAPIPath','oauthClientId','oauthClientSecret','oauthUniqueId','oauthScope'));
 	}
 
 	/**
@@ -91,6 +91,7 @@ class OauthSettingsForm extends Form {
 						'oauthClientId' => $this->getData('oauthClientId'),
 						'oauthClientSecret' => $this->getData('oauthClientSecret'),
 						'oauthUniqueId' => $this->getData('oauthUniqueId'),
+						'oauthScope' => $this->getData('oauthScope'),
 					)
 				)
 			),

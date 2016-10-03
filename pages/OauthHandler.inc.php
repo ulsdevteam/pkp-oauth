@@ -61,11 +61,14 @@ class OauthHandler extends Handler {
 					$userSettingsDao->updateSetting($user->getId(), 'oauth::'.$oauthApp, $response[$oauthSettings[$oauthApp]['oauthUniqueId']], 'string');
 				} else {
 					// Otherwise, send the user to the login screen (keep track of the oauthUniqueId to link upon login!)
+					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthApp => $response[$oauthSettings[$oauthApp]['oauthUniqueId']])));
+					Validation::redirectLogin();
 				}
 			}
 		} else {
 			// OAuth login was tried, but failed
 			// Show a message?
+			Validation::redirectLogin('plugins.generic.oauth.message.oauthLoginError');
 		}
 	}
 

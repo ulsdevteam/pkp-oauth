@@ -47,6 +47,10 @@
 		<td class="label">{fieldLabel name="oauthUniqueId" required="true" key="plugins.generic.oauth.manager.settings.oauthUniqueId"}</td>
 		<td class="label"><input type="text" name="oauthUniqueId" id="oauthUniqueId" value="{$oauthUniqueId|escape}" size="40" class="textField" /></td>
 	</tr>
+	<tr valign="top">
+		<td class="label">{fieldLabel name="oauthScope" required="true" key="plugins.generic.oauth.manager.settings.oauthScope"}</td>
+		<td class="label"><input type="text" name="oauthScope" id="oauthScope" value="{$oauthScope|escape}" size="40" class="textField" /></td>
+	</tr>
 </table>
 
 	{/fbvFormArea}
