@@ -47,8 +47,8 @@ class OauthPlugin extends GenericPlugin {
 		$page =& $args[0];
 
 		if ($this->getEnabled() && $page == 'oauth') {
-			$this->import('pages/OauthHander');
-			define('HANDLER_CLASS', 'OauthHander');
+			$this->import('pages/OauthHandler');
+			define('HANDLER_CLASS', 'OauthHandler');
 			return true;
 		}
 
