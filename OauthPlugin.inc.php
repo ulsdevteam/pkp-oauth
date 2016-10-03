@@ -138,32 +138,63 @@ class OauthPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * Get a list of available management verbs for this plugin
-	 * @return array
+	 * @see Plugin::getActions()
 	 */
-	function getManagementVerbs() {
+	function getActions($request, $actionArgs) {
+		$router = $request->getRouter();
+			import('lib.pkp.classes.linkAction.request.AjaxModal');
 		return array_merge(
-			parent::getManagementVerbs(),
 			$this->getEnabled()?array(
-				array('exampleVerb', __('plugins.generic.oauth.exampleVerb'))
-			):array()
+				new LinkAction(
+					'settings',
+					new AjaxModal(
+						$router->url(
+							$request,
+							null,
+							null,
+							'manage',
+							null,
+							array(
+								'verb' => 'settings',
+								'plugin' => $this->getName(),
+								'category' => 'generic'
+							)
+						),
+						$this->getDisplayName()
+					),
+					__('manager.plugins.settings'),
+					null
+				),
+			):array(),
+			parent::getActions($request, $actionArgs)
 		);
 	}
 
 	/**
 	 * @see Plugin::manage()
 	 */
-	function manage($verb, $args, &$message, &$messageParams, &$pluginModalContent = null) {
-		if (!parent::manage($verb, $args, $message, $messageParams)) return false;
+	function manage($args, $request) {
 		$request = $this->getRequest();
-		switch ($verb) {
-			case 'exampleVerb':
-				// Process the verb invocation
-				return false;
-			default:
-				// Unknown management verb
-				assert(false);
-				return false;
+		switch ($request->getUserVar('verb')) {
+			case 'settings':
+				$context = $request->getContext();
+				$contextId = ($context == null) ? 0 : $context->getId();
+
+				$templateMgr = TemplateManager::getManager();
+				$templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
+
+				$this->import('OauthSettingsForm');
+				$form = new OauthSettingsForm($this, $contextId);
+				if ($request->getUserVar('save')) {
+					$form->readInputData();
+					if ($form->validate()) {
+						$form->execute();
+						return new JSONMessage(true);
+					}
+				} else {
+					$form->initData();
+				}
+				return new JSONMessage(true, $form->fetch($request));
 		}
 	}
 }
