@@ -21,7 +21,7 @@ class OauthHandler extends Handler {
 		$plugin = PluginRegistry::getPlugin('generic', 'oauthplugin');
 		$contextId = ($context == null) ? 0 : $context->getId();
 		$oauthApp = $plugin->getSetting($contextId, 'oauthAppName', 'string');
-
+$test = Request::url(null, 'oauth', 'oauthAuthorize');
 		$oauthSettings = json_decode($plugin->getSetting($contextId, 'oauthAppSettings', 'string'), TRUE);
 		// fetch the access token
 		$curl = curl_init();
@@ -34,7 +34,8 @@ class OauthHandler extends Handler {
 						'code' => $request->getUserVar('code'),
 						'grant_type' => 'authorization_code',
 						'client_id' => $oauthSettings[$oauthApp]['oauthClientId'],
-						'client_secret' => $oauthSettings[$oauthApp]['oauthClientSecret']
+						'client_secret' => $oauthSettings[$oauthApp]['oauthClientSecret'],
+						'redirect_uri' => Request::url(null, 'oauth', 'oauthAuthorize'),
 				))
 		));
 		$result = curl_exec($curl);
@@ -42,7 +43,8 @@ class OauthHandler extends Handler {
 	
 		$subkey = explode('/', $oauthSettings[$oauthApp]['oauthUniqueId'], 2);
 		if (count($subkey) == 2) {
-			$uniqueId = $response[$subkey[0]][$subkey[1]];
+			// TODO: decode the JWT object and extract the $subkey[1]
+			$uniqueId = $response[$subkey[0]];
 		} else {
 			$uniqueId = $response[$oauthSettings[$oauthApp]['oauthUniqueId']];
 		}
