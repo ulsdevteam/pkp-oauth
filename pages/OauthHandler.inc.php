@@ -39,17 +39,33 @@ class OauthHandler extends Handler {
 		));
 		$result = curl_exec($curl);
 		$response = json_decode($result, true);
+	
+		$subkey = explode('/', $oauthSettings[$oauthApp]['oauthUniqueId'], 2);
+		if (count($subkey) == 2) {
+			$uniqueId = $response[$subkey[0]][$subkey[1]];
+		} else {
+			$uniqueId = $response[$oauthSettings[$oauthApp]['oauthUniqueId']];
+		}
 
-		if ($response[$oauthSettings[$oauthApp]['oauthUniqueId']]) {
+		if ($uniqueId) {
 
 			$userSettingsDao = DAORegistry::getDAO('UserSettingsDAO');
-			$userDao = DAORegistry::getDAO('UserDAO');
-			// Should this be UserSettingsDAO::getUsersBySetting()?
-			$userByAuthId = $userDao->getBySetting('oauth::'.$oauthApp, $response['orcid']);
-			if ($userByAuthId) {
+			$users = $userSettingsDao->getUsersBySetting('oauth::'.$oauthApp, $uniqueId);
+			$validUser = NULL;
+			$matchCount = 0;
+			while ($user = $users->next()) {
+				$matchCount++;
+				$validUser = $user;
+			}
+			if ($matchCount > 1) {
+				$validUser = FALSE;
+				Validation::redirectLogin('plugins.generic.oauth.message.oauthTooManyMatches');
+			}
+			
+			if ($validUser) {
 				// OAuth successful, with match -- log in user.
 				$reason = null;
-				Validation::registerUserSession($userByAuthId, $reason);
+				Validation::registerUserSession($validUser, $reason);
 			} else {
 				// OAuth successful, but not linked to a user account (yet)
 				$sessionManager = SessionManager::getManager();
@@ -58,10 +74,10 @@ class OauthHandler extends Handler {
 
 				if (isset($user)) {
 					// If the user is authenticated, link this user account
-					$userSettingsDao->updateSetting($user->getId(), 'oauth::'.$oauthApp, $response[$oauthSettings[$oauthApp]['oauthUniqueId']], 'string');
+					$userSettingsDao->updateSetting($user->getId(), 'oauth::'.$oauthApp, $uniqueId, 'string');
 				} else {
 					// Otherwise, send the user to the login screen (keep track of the oauthUniqueId to link upon login!)
-					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthApp => $response[$oauthSettings[$oauthApp]['oauthUniqueId']])));
+					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthApp => $uniqueId)));
 				}
 			}
 			Validation::redirectLogin();
