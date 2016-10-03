@@ -21,7 +21,7 @@ class OauthHandler extends Handler {
 		$plugin = PluginRegistry::getPlugin('generic', 'oauthplugin');
 		$contextId = ($context == null) ? 0 : $context->getId();
 		$oauthApp = $plugin->getSetting($contextId, 'oauthAppName', 'string');
-$test = Request::url(null, 'oauth', 'oauthAuthorize');
+
 		$oauthSettings = json_decode($plugin->getSetting($contextId, 'oauthAppSettings', 'string'), TRUE);
 		// fetch the access token
 		$curl = curl_init();
