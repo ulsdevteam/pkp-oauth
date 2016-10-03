@@ -16,4 +16,6 @@
 	<message key="plugins.generic.oauth.name">OAuth plugin</message>
 	<message key="plugins.generic.oauth.description">Allow for OAuth authentication.</message>
 	<message key="plugins.generic.oauth.exampleVerb">Example Verb</message>
+	<message key="plugins.generic.oauth.externalLogIn">Login with:</message>
+	<message key="plugins.generic.oauth.submitAction">{$oauthAppName} Login</message>
 </locale>

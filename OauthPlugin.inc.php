@@ -74,7 +74,9 @@ class OauthPlugin extends GenericPlugin {
 				case 'frontend/pages/userRegister.tpl':
 				case 'frontend/pages/userLogin.tpl':
 					$templateManager->register_outputfilter(array($this, 'javascriptFilter'));
-					break;			}
+					$templateManager->register_outputfilter(array($this, 'loginFilter'));
+					break;
+			}
 		}
 
 		// Permit additional plugins to use this hook; returning true
@@ -102,6 +104,33 @@ class OauthPlugin extends GenericPlugin {
 		return $output;
 	}
 
+	/**
+	 * Output filter adds other oauth app interaction to login form.
+	 * @param $output string
+	 * @param $templateMgr TemplateManager
+	 * @return $string
+	 */
+	function loginFilter($output, &$templateMgr) {
+		if (preg_match('#<form[^>]+id="login"[^>]+>.*<\/form>#s', $output, $matches, PREG_OFFSET_CAPTURE)) {
+			$match = $matches[0][0];
+			$offset = $matches[0][1];
+			$context = Request::getContext();
+			$contextId = ($context == null) ? 0 : $context->getId();
+
+			$oauthAppSettings = $this->getSetting($contextId, 'oauthAppSettings');
+			$templateMgr->assign(array(
+					'targetOp' => 'login',
+					'oauthAppSettings' => json_decode($oauthAppSettings, true),
+			));
+
+			$newOutput = substr($output, 0, $offset+strlen($match));
+			$newOutput .= $templateMgr->fetch($this->getTemplatePath() . 'oauthLoader.tpl');
+			$newOutput .= substr($output, $offset+strlen($match));
+			$output = $newOutput;
+		}
+		$templateMgr->unregister_outputfilter('loginFilter');
+		return $output;
+	}
 	/**
 	 * Override the builtin to get the correct template path.
 	 * @return string
