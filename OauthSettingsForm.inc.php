@@ -36,7 +36,7 @@ class OauthSettingsForm extends Form {
 
 		parent::Form($plugin->getTemplatePath() . 'settingsForm.tpl');
 
-		$this->addCheck(new FormValidator($this, 'oauthAPIPath', 'required', 'plugins.generic.oauth.manager.settings.oauthAPIPathRequired'));
+		$this->addCheck(new FormValidator($this, 'oauthAPIAuth', 'required', 'plugins.generic.oauth.manager.settings.oauthAPIPathRequired'));
 
 		$this->addCheck(new FormValidatorPost($this));
 		$this->addCheck(new FormValidatorCSRF($this));
@@ -59,7 +59,7 @@ class OauthSettingsForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
-		$this->readUserVars(array('oauthAppName','oauthAPIPath','oauthClientId','oauthClientSecret','oauthUniqueId','oauthScope'));
+		$this->readUserVars(array('oauthAppName','oauthAPIAuth','oauthAPIVerify','oauthClientId','oauthClientSecret','oauthUniqueId','oauthScope'));
 	}
 
 	/**
@@ -87,7 +87,8 @@ class OauthSettingsForm extends Form {
 			json_encode(
 				array(
 					$this->getData('oauthAppName') => array(
-						'oauthAPIPath' => $this->getData('oauthAPIPath'),
+						'oauthAPIAuth' => $this->getData('oauthAPIAuth'),
+						'oauthAPIVerify' => $this->getData('oauthAPIVerify'),
 						'oauthClientId' => $this->getData('oauthClientId'),
 						'oauthClientSecret' => $this->getData('oauthClientSecret'),
 						'oauthUniqueId' => $this->getData('oauthUniqueId'),

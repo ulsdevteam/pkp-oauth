@@ -32,8 +32,12 @@
 		<td width="80%" class="value"><input type="text" name="oauthAppName" id="oauthAppName" value="{$oauthAppName|escape}" size="40" class="textField" /></td>
 	</tr>
 	<tr valign="top">
-		<td width="20%" class="label">{fieldLabel name="oauthAPIPath" required="true" key="plugins.generic.oauth.manager.settings.oauthAPIPath"}</td>
-		<td width="80%" class="value"><input type="text" name="oauthAPIPath" id="oauthAPIPath" value="{$oauthAPIPath|escape}" size="40" class="textField" /></td>
+		<td width="20%" class="label">{fieldLabel name="oauthAPIAuth" required="true" key="plugins.generic.oauth.manager.settings.oauthAPIAuth"}</td>
+		<td width="80%" class="value"><input type="text" name="oauthAPIAuth" id="oauthAPIAuth" value="{$oauthAPIAuth|escape}" size="40" class="textField" /></td>
+	</tr>
+	<tr valign="top">
+		<td width="20%" class="label">{fieldLabel name="oauthAPIVerify" required="true" key="plugins.generic.oauth.manager.settings.oauthAPIVerify"}</td>
+		<td width="80%" class="value"><input type="text" name="oauthAPIVerify" id="oauthAPIVerify" value="{$oauthAPIVerify|escape}" size="40" class="textField" /></td>
 	</tr>
 	<tr valign="top">
 		<td class="label">{fieldLabel name="oauthClientId" required="true" key="plugins.generic.oauth.manager.settings.oauthClientId"}</td>
