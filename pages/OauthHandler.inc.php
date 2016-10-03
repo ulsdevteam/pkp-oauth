@@ -20,9 +20,9 @@ class OauthHandler extends Handler {
 		$context = $request->getContext();
 		$plugin = PluginRegistry::getPlugin('generic', 'oauthplugin');
 		$contextId = ($context == null) ? 0 : $context->getId();
-		$oauthApp = $plugin->getSettings($contextId, 'oauthAppName', 'string');
+		$oauthApp = $plugin->getSetting($contextId, 'oauthAppName', 'string');
 
-		$oauthSettings = json_decode($plugin->getSettings($contextId, 'oauthAppSettings', 'string'), TRUE);
+		$oauthSettings = json_decode($plugin->getSetting($contextId, 'oauthAppSettings', 'string'), TRUE);
 		// fetch the access token
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
