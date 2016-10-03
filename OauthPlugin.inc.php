@@ -16,6 +16,17 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 
+define('OAUTH_ORCID_OAUTH_URL', 'https://orcid.org/oauth/');
+define('OAUTH_ORCID_OAUTH_URL_SANDBOX', 'https://sandbox.orcid.org/oauth/');
+define('OAUTH_ORCID_API_URL_PUBLIC', 'https://pub.orcid.org/');
+define('OAUTH_ORCID_API_URL_PUBLIC_SANDBOX', 'https://pub.sandbox.orcid.org/');
+define('OAUTH_ORCID_API_URL_MEMBER', 'https://api.orcid.org/');
+define('OAUTH_ORCID_API_URL_MEMBER_SANDBOX', 'https://api.sandbox.orcid.org/');
+
+define('OAUTH_OAUTH_TOKEN_URL', 'oauth/token');
+define('OAUTH_ORCID_API_VERSION_URL', 'v1.2/');
+define('OAUTH_ORCID_PROFILE_URL', 'orcid-profile');
+
 class OauthPlugin extends GenericPlugin {
 	/**
 	 * Register the plugin, if enabled
@@ -67,7 +78,7 @@ class OauthPlugin extends GenericPlugin {
 		// Get the template manager from the hook parameters.
 		$templateManager =& $args[0];
 		$template =& $args[1];
-				
+
 		if ($this->getEnabled()) {
 			$request =& PKPApplication::getRequest();
 			switch ($template) {
@@ -109,7 +120,7 @@ class OauthPlugin extends GenericPlugin {
 	function getTemplatePath() {
 		return parent::getTemplatePath() . 'templates/';
 	}
-	
+
 	/**
 	 * Get the display name of this plugin
 	 * @return string
