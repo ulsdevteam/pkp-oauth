@@ -43,6 +43,10 @@
 		<td class="label">{fieldLabel name="oauthClientSecret" required="true" key="plugins.generic.oauth.manager.settings.oauthClientSecret"}</td>
 		<td class="label"><input type="text" name="oauthClientSecret" id="oauthClientSecret" value="{$oauthClientSecret|escape}" size="40" class="textField" /></td>
 	</tr>
+	<tr valign="top">
+		<td class="label">{fieldLabel name="oauthUniqueId" required="true" key="plugins.generic.oauth.manager.settings.oauthUniqueId"}</td>
+		<td class="label"><input type="text" name="oauthUniqueId" id="oauthUniqueId" value="{$oauthUniqueId|escape}" size="40" class="textField" /></td>
+	</tr>
 </table>
 
 	{/fbvFormArea}
