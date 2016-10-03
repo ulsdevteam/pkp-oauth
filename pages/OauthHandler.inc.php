@@ -26,7 +26,7 @@ class OauthHandler extends Handler {
 		// fetch the access token
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-				CURLOPT_URL => $oauthSettings[$oauthApp]['oauthAPIPath'],
+				CURLOPT_URL => $oauthSettings[$oauthApp]['oauthAPIVerify'],
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_HTTPHEADER => array('Accept: application/json'),
 				CURLOPT_POST => true,
@@ -62,9 +62,9 @@ class OauthHandler extends Handler {
 				} else {
 					// Otherwise, send the user to the login screen (keep track of the oauthUniqueId to link upon login!)
 					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthApp => $response[$oauthSettings[$oauthApp]['oauthUniqueId']])));
-					Validation::redirectLogin();
 				}
 			}
+			Validation::redirectLogin();
 		} else {
 			// OAuth login was tried, but failed
 			// Show a message?
