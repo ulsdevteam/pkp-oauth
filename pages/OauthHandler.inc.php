@@ -20,39 +20,38 @@ class OauthHandler extends Handler {
 		$context = $request->getContext();
 		$plugin = PluginRegistry::getPlugin('generic', 'oauthplugin');
 		$contextId = ($context == null) ? 0 : $context->getId();
-		$oauthApp = $plugin->getSetting($contextId, 'oauthAppName', 'string');
+		$oauthAppName = $request->getUserVar('oauthAppName');
 
-		$oauthSettings = json_decode($plugin->getSetting($contextId, 'oauthAppSettings', 'string'), TRUE);
+		$oauthSettings = json_decode($plugin->getSetting($contextId, 'oauthAppSettings'), TRUE);
 		// fetch the access token
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-				CURLOPT_URL => $oauthSettings[$oauthApp]['oauthAPIVerify'],
+				CURLOPT_URL => $oauthSettings[$oauthAppName]['oauthAPIVerify'],
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_HTTPHEADER => array('Accept: application/json'),
 				CURLOPT_POST => true,
 				CURLOPT_POSTFIELDS => http_build_query(array(
 						'code' => $request->getUserVar('code'),
 						'grant_type' => 'authorization_code',
-						'client_id' => $oauthSettings[$oauthApp]['oauthClientId'],
-						'client_secret' => $oauthSettings[$oauthApp]['oauthClientSecret'],
+						'client_id' => $oauthSettings[$oauthAppName]['oauthClientId'],
+						'client_secret' => $oauthSettings[$oauthAppName]['oauthClientSecret'],
 						'redirect_uri' => Request::url(null, 'oauth', 'oauthAuthorize'),
 				))
 		));
 		$result = curl_exec($curl);
 		$response = json_decode($result, true);
-	
-		$subkey = explode('/', $oauthSettings[$oauthApp]['oauthUniqueId'], 2);
+
+		$subkey = explode('/', $oauthSettings[$oauthAppName]['oauthUniqueId'], 2);
 		if (count($subkey) == 2) {
 			// TODO: decode the JWT object and extract the $subkey[1]
 			$uniqueId = $response[$subkey[0]];
 		} else {
-			$uniqueId = $response[$oauthSettings[$oauthApp]['oauthUniqueId']];
+			$uniqueId = $response[$oauthSettings[$oauthAppName]['oauthUniqueId']];
 		}
 
 		if ($uniqueId) {
-
 			$userSettingsDao = DAORegistry::getDAO('UserSettingsDAO');
-			$users = $userSettingsDao->getUsersBySetting('oauth::'.$oauthApp, $uniqueId);
+			$users = $userSettingsDao->getUsersBySetting('oauth::'.$oauthAppName, $uniqueId);
 			$validUser = NULL;
 			$matchCount = 0;
 			while ($user = $users->next()) {
@@ -63,7 +62,7 @@ class OauthHandler extends Handler {
 				$validUser = FALSE;
 				Validation::redirectLogin('plugins.generic.oauth.message.oauthTooManyMatches');
 			}
-			
+
 			if ($validUser) {
 				// OAuth successful, with match -- log in user.
 				$reason = null;
@@ -76,10 +75,10 @@ class OauthHandler extends Handler {
 
 				if (isset($user)) {
 					// If the user is authenticated, link this user account
-					$userSettingsDao->updateSetting($user->getId(), 'oauth::'.$oauthApp, $uniqueId, 'string');
+					$userSettingsDao->updateSetting($user->getId(), 'oauth::'.$oauthAppName, $uniqueId, 'string');
 				} else {
 					// Otherwise, send the user to the login screen (keep track of the oauthUniqueId to link upon login!)
-					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthApp => $uniqueId)));
+					$userSession->setSessionVar('oauth', json_encode(array('oauth::'.$oauthAppName => $uniqueId)));
 				}
 			}
 			Validation::redirectLogin();

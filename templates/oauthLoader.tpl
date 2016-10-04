@@ -17,6 +17,6 @@
 {assign var=oauthAPIAuth value=$oauthAppSetting.oauthAPIAuth}
 {assign var=oauthClientId value=$oauthAppSetting.oauthClientId}
 {assign var=oauthScope value=$oauthAppSetting.oauthScope}
-<a href="{$oauthAPIAuth|escape}?client_id={$oauthClientId|urlencode}&response_type=code&scope={$oauthScope|escape}&redirect_uri={url|urlencode router="page" page="oauth" op="oauthAuthorize" escape=false}"><img id="{$oauthAppName|escape}-login-button" src="{$baseUrl}/plugins/generic/oauth/templates/images/{$oauthAppName|escape}.png" width="24" height="24" alt="{translate key="plugins.generic.oauth.submitAction" oauthAppName=$oauthAppName}"/></a>
+<a href="{$oauthAPIAuth|escape}?client_id={$oauthClientId|urlencode}&response_type=code&scope={$oauthScope|escape}&redirect_uri={url|urlencode router="page" page="oauth" op="oauthAuthorize" oauthAppName=$oauthAppName escape=false}"><img id="{$oauthAppName|escape}-login-button" src="{$baseUrl}/plugins/generic/oauth/templates/images/{$oauthAppName|escape}.png" width="24" height="24" alt="{translate key="plugins.generic.oauth.submitAction" oauthAppName=$oauthAppName}"/></a>
 {/foreach}
 </p>

@@ -30,6 +30,9 @@ class OauthPlugin extends GenericPlugin {
 				HookRegistry::register('TemplateManager::display',array($this, 'templateCallback'));
 				// Register load callback
 				HookRegistry::register('LoadHandler', array($this, 'loadCallback'));
+				// This hook is used to register the components this plugin implements to
+				// permit administration of OAuth applications.
+				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
 			}
 			return true;
 		}
@@ -54,6 +57,20 @@ class OauthPlugin extends GenericPlugin {
 
 		// Permit additional plugins to use this hook; returning true
 		// here would interrupt processing of this hook instead.
+		return false;
+	}
+
+	/**
+	 * Permit requests to the OAuth application grid handler
+	 * @param $hookName string The name of the hook being invoked
+	 * @param $args array The parameters to the invoked hook
+	 */
+	function setupGridHandler($hookName, $params) {
+		$component =& $params[0];
+		if ($component == 'plugins.generic.oauth.controllers.grid.OauthAppGridHandler') {
+			define('OAUTH_PLUGIN_NAME', $this->getName());
+			return true;
+		}
 		return false;
 	}
 
@@ -119,8 +136,8 @@ class OauthPlugin extends GenericPlugin {
 
 			$oauthAppSettings = $this->getSetting($contextId, 'oauthAppSettings');
 			$templateMgr->assign(array(
-					'targetOp' => 'login',
-					'oauthAppSettings' => json_decode($oauthAppSettings, true),
+				'targetOp' => 'login',
+				'oauthAppSettings' => json_decode($oauthAppSettings, true),
 			));
 
 			$newOutput = substr($output, 0, $offset+strlen($match));
@@ -160,7 +177,7 @@ class OauthPlugin extends GenericPlugin {
 	 */
 	function getActions($request, $actionArgs) {
 		$router = $request->getRouter();
-			import('lib.pkp.classes.linkAction.request.AjaxModal');
+		import('lib.pkp.classes.linkAction.request.AjaxModal');
 		return array_merge(
 			$this->getEnabled()?array(
 				new LinkAction(
@@ -195,24 +212,15 @@ class OauthPlugin extends GenericPlugin {
 		$request = $this->getRequest();
 		switch ($request->getUserVar('verb')) {
 			case 'settings':
-				$context = $request->getContext();
-				$contextId = ($context == null) ? 0 : $context->getId();
-
-				$templateMgr = TemplateManager::getManager();
-				$templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
-
-				$this->import('OauthSettingsForm');
-				$form = new OauthSettingsForm($this, $contextId);
-				if ($request->getUserVar('save')) {
-					$form->readInputData();
-					if ($form->validate()) {
-						$form->execute();
-						return new JSONMessage(true);
-					}
-				} else {
-					$form->initData();
-				}
-				return new JSONMessage(true, $form->fetch($request));
+				$templateMgr = TemplateManager::getManager($request);
+				$dispatcher = $request->getDispatcher();
+				return $templateMgr->fetchAjax(
+					'oauthAppGridUrlGridContainer',
+					$dispatcher->url(
+						$request, ROUTE_COMPONENT, null,
+						'plugins.generic.oauth.controllers.grid.OauthAppGridHandler', 'fetchGrid'
+					)
+				);
 		}
 	}
 }

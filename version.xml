@@ -18,5 +18,4 @@
 	<date>2014-07-09</date>
 	<lazy-load>1</lazy-load>
 	<class>OauthPlugin</class>
-	<sitewide>1</sitewide>
 </version>

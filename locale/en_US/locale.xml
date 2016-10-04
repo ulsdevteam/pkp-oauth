@@ -14,8 +14,18 @@
 
 <locale name="en_US" full_name="U.S. English">
 	<message key="plugins.generic.oauth.name">OAuth plugin</message>
-	<message key="plugins.generic.oauth.description">Allow for OAuth authentication.</message>
-	<message key="plugins.generic.oauth.exampleVerb">Example Verb</message>
+	<message key="plugins.generic.oauth.submitAction">{$oauthAppName} Login</message>
+	<message key="plugins.generic.oauth.oauthApps">OAuth Applications</message>
+	<message key="plugins.generic.oauth.oauthApps.noneCreated">No OAuth applications have been created.</message>
+	<message key="plugins.generic.oauth.addOauthApp">Add OAuth Application</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.description">Please fill in the required fields to enable the login with the given application:</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthAppName">Application name</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthAPIAuth">Authorize URL</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthAPIVerify">Token URL</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthClientId">Client ID</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthClientSecret">Client secret</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthUniqueId">Unique ID returned</message>
+	<message key="plugins.generic.oauth.oauthApp.settings.oauthScope">Scope</message>
 	<message key="plugins.generic.oauth.externalLogIn">Login with:</message>
 	<message key="plugins.generic.oauth.submitAction">{$oauthAppName} Login</message>
 </locale>
