@@ -35,7 +35,7 @@ class OauthHandler extends Handler {
 						'grant_type' => 'authorization_code',
 						'client_id' => $oauthSettings[$oauthAppName]['oauthClientId'],
 						'client_secret' => $oauthSettings[$oauthAppName]['oauthClientSecret'],
-						'redirect_uri' => Request::url(null, 'oauth', 'oauthAuthorize'),
+						'redirect_uri' => Request::url(null, 'oauth', 'oauthAuthorize').'?oauthAppName='.$oauthAppName,
 				))
 		));
 		$result = curl_exec($curl);

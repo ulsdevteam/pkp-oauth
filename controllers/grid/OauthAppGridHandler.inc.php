@@ -23,8 +23,8 @@ class OauthAppGridHandler extends GridHandler {
 	/**
 	 * Constructor
 	 */
-	function OauthAppGridHandler() {
-		parent::GridHandler();
+	function __construct() {
+		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),
 			array('fetchGrid', 'fetchRow', 'addOauthApp', 'editOauthApp', 'updateOauthApp', 'deleteOauthApp')

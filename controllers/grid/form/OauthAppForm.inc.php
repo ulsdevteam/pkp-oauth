@@ -29,8 +29,8 @@ class OauthAppForm extends Form {
 	 * @param $contextId int
 	 * @param $oauthAppName string
 	 */
-	function OauthAppForm($template, $contextId, $oauthAppName = null) {
-		parent::Form($template);
+	function __construct($template, $contextId, $oauthAppName = null) {
+		parent::__construct($template);
 
 		$this->contextId = $contextId;
 		$this->oauthAppName = $oauthAppName;

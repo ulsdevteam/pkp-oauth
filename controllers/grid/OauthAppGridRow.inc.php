@@ -16,12 +16,6 @@
 import('lib.pkp.classes.controllers.grid.GridRow');
 
 class OauthAppGridRow extends GridRow {
-	/**
-	 * Constructor
-	 */
-	function OauthAppGridRow() {
-		parent::GridRow();
-	}
 
 	//
 	// Overridden template methods
